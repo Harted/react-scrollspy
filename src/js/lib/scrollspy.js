@@ -15,7 +15,7 @@ function isEqualArray(a, b) {
 
 export default class Scrollspy extends React.Component {
 
-  static get propTypes () {
+  static get propTypes() {
     return {
       items: PropTypes.arrayOf(PropTypes.string).isRequired,
       currentClassName: PropTypes.string.isRequired,
@@ -28,18 +28,18 @@ export default class Scrollspy extends React.Component {
     }
   }
 
-  static get defaultProps () {
+  static get defaultProps() {
     return {
       items: [],
       currentClassName: '',
       style: {},
       componentTag: 'ul',
       offset: 0,
-      onUpdate() {},
+      onUpdate() { },
     }
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -53,7 +53,7 @@ export default class Scrollspy extends React.Component {
     this._handleSpy = this._handleSpy.bind(this)
   }
 
-  _initSpyTarget (items) {
+  _initSpyTarget(items) {
     const targetItems = items.map((item) => {
 
       return document.getElementById(item)
@@ -63,7 +63,7 @@ export default class Scrollspy extends React.Component {
   }
 
   // https://github.com/makotot/react-scrollspy/pull/45
-  _fillArray (array, val) {
+  _fillArray(array, val) {
     let newArray = []
 
     for (let i = 0, max = array.length; i < max; i++) {
@@ -73,11 +73,11 @@ export default class Scrollspy extends React.Component {
     return newArray
   }
 
-  _isScrolled () {
+  _isScrolled() {
     return this._getScrollDimension().scrollTop > 0
   }
 
-  _getScrollDimension () {
+  _getScrollDimension() {
     const doc = document
     const { rootEl } = this.props
     const scrollTop = rootEl ? doc.querySelector(rootEl).scrollTop : (doc.documentElement.scrollTop || doc.body.parentNode.scrollTop || doc.body.scrollTop)
@@ -89,7 +89,7 @@ export default class Scrollspy extends React.Component {
     }
   }
 
-  _getElemsViewState (targets) {
+  _getElemsViewState(targets) {
     let elemsInView = []
     let elemsOutView = []
     let viewStatusList = []
@@ -134,7 +134,7 @@ export default class Scrollspy extends React.Component {
     }
   }
 
-  _isInView (el) {
+  _isInView(el) {
     if (!el) {
       return false
     }
@@ -159,7 +159,7 @@ export default class Scrollspy extends React.Component {
     return (elTop < scrollBottom) && (elBottom > scrollTop)
   }
 
-  _isAtBottom () {
+  _isAtBottom() {
     const { rootEl } = this.props
     const { scrollTop, scrollHeight } = this._getScrollDimension()
     const winH = rootEl ? document.querySelector(rootEl).getBoundingClientRect().height : window.innerHeight
@@ -168,7 +168,7 @@ export default class Scrollspy extends React.Component {
     return scrolledToBottom
   }
 
-  _getScrolledPast (viewStatusList) {
+  _getScrolledPast(viewStatusList) {
     if (!viewStatusList.some((item) => item)) {
       return viewStatusList
     }
@@ -188,7 +188,7 @@ export default class Scrollspy extends React.Component {
     return scrolledPastItems
   }
 
-  _spy (targets) {
+  _spy(targets) {
     const elemensViewState = this._getElemsViewState(targets)
     const currentStatuses = this.state.inViewState
 
@@ -200,7 +200,7 @@ export default class Scrollspy extends React.Component {
     })
   }
 
-  _update (prevStatuses) {
+  _update(prevStatuses) {
     if (isEqualArray(this.state.inViewState, prevStatuses)) {
       return
     }
@@ -208,12 +208,12 @@ export default class Scrollspy extends React.Component {
     this.props.onUpdate(this.state.targetItems[this.state.inViewState.indexOf(true)])
   }
 
-  _handleSpy () {
+  _handleSpy() {
     throttle(this._spy(), 100)
   }
 
-  _initFromProps () {
-    const targetItems = this._initSpyTarget(this.props.items)
+  _initFromProps(props) {
+    const targetItems = this._initSpyTarget(props.items)
 
     this.setState({
       targetItems,
@@ -234,20 +234,20 @@ export default class Scrollspy extends React.Component {
     el.addEventListener('scroll', this._handleSpy)
   }
 
-  componentDidMount () {
-    this._initFromProps()
+  componentDidMount() {
+    this._initFromProps(this.props)
     this.onEvent()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.offEvent()
   }
 
-  UNSAFE_componentWillReceiveProps () {
-    this._initFromProps()
+  getDerivedStateFromProps(props) {
+    this._initFromProps(props)
   }
 
-  render () {
+  render() {
     const Tag = this.props.componentTag
     const {
       children,
@@ -264,25 +264,25 @@ export default class Scrollspy extends React.Component {
       const ChildTag = child.type
       const isScrolledPast = scrolledPastClassName && this.state.isScrolledPast[idx]
       const childClass = classNames({
-        [`${ child.props.className }`]: child.props.className,
-        [`${ this.props.currentClassName }`]: this.state.inViewState[idx],
-        [`${ this.props.scrolledPastClassName }`]: isScrolledPast,
+        [`${child.props.className}`]: child.props.className,
+        [`${this.props.currentClassName}`]: this.state.inViewState[idx],
+        [`${this.props.scrolledPastClassName}`]: isScrolledPast,
       })
 
       return (
-        <ChildTag { ...child.props } className={ childClass } key={ counter++ }>
-          { child.props.children }
+        <ChildTag {...child.props} className={childClass} key={counter++}>
+          {child.props.children}
         </ChildTag>
       )
     })
 
     const itemClass = classNames({
-      [`${ className }`]: className,
+      [`${className}`]: className,
     })
 
     return (
-      <Tag className={ itemClass } style={ style }>
-        { items }
+      <Tag className={itemClass} style={style}>
+        {items}
       </Tag>
     )
   }
