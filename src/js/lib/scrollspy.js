@@ -243,10 +243,6 @@ export default class Scrollspy extends React.Component {
     this.offEvent()
   }
 
-  getDerivedStateFromProps(props) {
-    this._initFromProps(props)
-  }
-
   render() {
     const Tag = this.props.componentTag
     const {

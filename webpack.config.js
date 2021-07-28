@@ -39,11 +39,15 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: (loader) => [
-                require('postcss-flexbugs-fixes')(),
-                require('autoprefixer')(),
-                require('cssnano')(),
-              ],
+              postcssOptions: {
+                plugins: [
+                  [
+                    'postcss-flexbugs-fixes',
+                    'autoprefixer',
+                    'cssnano'
+                  ],
+                ],
+              },
             },
           },
           {
